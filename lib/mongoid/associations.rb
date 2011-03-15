@@ -69,7 +69,8 @@ module Mongoid # :nodoc:
       def belongs_to_related(name, options = {}, &block)
         opts = optionize(name, options, fk(name, options), &block)
         associate(Associations::BelongsToRelated, opts)
-        field(opts.foreign_key, :type => Mongoid.use_object_ids ? BSON::ObjectId : String)
+        key_type = options.key?(:key_type) ? options[:key_type] : String
+        field(opts.foreign_key, :type => Mongoid.use_object_ids ? BSON::ObjectId : key_type)
         index(opts.foreign_key) unless embedded?
       end
 
