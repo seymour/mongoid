@@ -63,6 +63,7 @@ require "mongoid/timestamps"
 require "mongoid/versioning"
 require "mongoid/components"
 require "mongoid/document"
+require "mongoid/paranoia"
 
 module Mongoid #:nodoc
 
