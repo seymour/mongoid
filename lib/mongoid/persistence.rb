@@ -111,6 +111,10 @@ module Mongoid #:nodoc:
         result
       end
 
+      def update_attribute(name, value)
+        update_attributes(name => value)
+      end
+
       # Upsert the document - will perform an insert if the document is new, and
       # update if not.
       #
