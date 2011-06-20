@@ -178,9 +178,9 @@ module Mongoid #:nodoc:
         # <tt>RelatesToOne.update(game, person, options)</tt>
         def update(target, document, options)
           target.each { |child| 
-            inverse_assoc = child.class.associations.values.detect { |assoc|
+            inverse_assoc = child.class.respond_to?(:associations) ? child.class.associations.values.detect { |assoc|
               assoc.klass == document.class && assoc.association == Mongoid::Associations::BelongsToRelated
-            }
+            } : nil
             name = if inverse_assoc
               inverse_assoc.name
             else
