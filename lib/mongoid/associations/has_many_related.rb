@@ -177,8 +177,17 @@ module Mongoid #:nodoc:
         #
         # <tt>RelatesToOne.update(game, person, options)</tt>
         def update(target, document, options)
-          name = document.class.to_s.underscore
-          target.each { |child| child.send("#{name}=", document) }
+          target.each { |child| 
+            inverse_assoc = child.class.associations.values.detect { |assoc|
+              assoc.klass == document.class && assoc.association == Mongoid::Associations::BelongsToRelated
+            }
+            name = if inverse_assoc
+              inverse_assoc.name
+            else
+              document.class.to_s.underscore
+            end
+            child.send("#{name}=", document) 
+          }
           instantiate(document, options, target)
         end
       end
