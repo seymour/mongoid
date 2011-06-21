@@ -11,7 +11,8 @@ module Mongoid #:nodoc
       :parameterize_keys,
       :persist_in_safe_mode,
       :raise_not_found_error,
-      :use_object_ids
+      :use_object_ids,
+      :autocreate_indexes
 
     # Defaults the configuration options to true.
     def initialize
@@ -135,6 +136,7 @@ module Mongoid #:nodoc
       @reconnect_time = 3
       @use_object_ids = false
       @time_zone = nil
+      @autocreate_indexes = true
     end
 
     protected

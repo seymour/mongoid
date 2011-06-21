@@ -23,7 +23,7 @@ module Mongoid #:nodoc
       # Adds an index on the field specified. Options can be :unique => true or
       # :unique => false. It will default to the latter.
       def index(name, options = { :unique => false })
-        collection.create_index(name, options)
+        collection.create_index(name, options) if Mongoid.autocreate_indexes
       end
     end
   end
