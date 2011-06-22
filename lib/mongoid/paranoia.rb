@@ -14,7 +14,7 @@ module Mongoid #:nodoc:
     extend ActiveSupport::Concern
 
     included do
-      field :deleted_at, :type => Time
+      field :paranoia_deleted_at, :type => Time
     end
 
     # Delete the paranoid +Document+ from the database completely. This will
@@ -46,8 +46,8 @@ module Mongoid #:nodoc:
     # @return [ true ] True.
     def remove(options = {})
       now = Time.now
-      collection.update({ :_id => id }, { '$set' => { :deleted_at => now } })
-      @attributes["deleted_at"] = now
+      collection.update({ :_id => id }, { '$set' => { :paranoia_deleted_at => now } })
+      @attributes["paranoia_deleted_at"] = now
       true
     end
     alias :delete :remove
@@ -59,7 +59,7 @@ module Mongoid #:nodoc:
     #
     # @return [ true, false ] If the document is destroyed.
     def destroyed?
-      @destroyed || !!deleted_at
+      @destroyed || !!paranoia_deleted_at
     end
 
     # Restores a previously soft-deleted document. Handles this by removing the
@@ -68,8 +68,8 @@ module Mongoid #:nodoc:
     # @example Restore the document from deleted state.
     #   document.restore
     def restore
-      collection.update({ :_id => id }, { '$unset' => { :deleted_at => true } })
-      @attributes.delete("deleted_at")
+      collection.update({ :_id => id }, { '$unset' => { :paranoia_deleted_at => true } })
+      @attributes.delete("paranoia_deleted_at")
     end
 
     module ClassMethods #:nodoc:
@@ -84,7 +84,7 @@ module Mongoid #:nodoc:
       #
       # @return [ Criteria ] The paranoid compliant criteria.
       def criteria(*args)
-        super.where(:deleted_at.exists => false)
+        super.where(:paranoia_deleted_at.exists => false)
       end
 
       # Find deleted documents
@@ -96,7 +96,7 @@ module Mongoid #:nodoc:
       #
       # @return [ Criteria ] The deleted criteria.
       def deleted
-        where(:deleted_at.exists => true)
+        where(:paranoia_deleted_at.exists => true)
       end
     end
   end
