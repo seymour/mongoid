@@ -197,8 +197,10 @@ module Mongoid # :nodoc:
       #
       def has_many_related(name, options = {}, &block)
         associate(Associations::HasManyRelated, optionize(name, options, fk(self.name, options), &block))
-        before_save do |document|
-          document.update_associations(name)
+        unless ENV['IMPORT']
+          before_save do |document|
+            document.update_associations(name)
+          end
         end
       end
 
