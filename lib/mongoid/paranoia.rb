@@ -11,10 +11,12 @@ module Mongoid #:nodoc:
   #     include Mongoid::Paranoia
   #   end
   module Paranoia
+    FIELD_NAME = :paranoia_at
+    
     extend ActiveSupport::Concern
 
     included do
-      field :paranoia_deleted_at, :type => Time
+      field FIELD_NAME, :type => Time
     end
 
     # Delete the paranoid +Document+ from the database completely. This will
@@ -46,7 +48,7 @@ module Mongoid #:nodoc:
     # @return [ true ] True.
     def remove(options = {})
       now = Time.now
-      collection.update({ :_id => id }, { '$set' => { :paranoia_deleted_at => now } })
+      collection.update({ :_id => id }, { '$set' => { FIELD_NAME => now } })
       @attributes["paranoia_deleted_at"] = now
       true
     end
@@ -68,7 +70,7 @@ module Mongoid #:nodoc:
     # @example Restore the document from deleted state.
     #   document.restore
     def restore
-      collection.update({ :_id => id }, { '$unset' => { :paranoia_deleted_at => true } })
+      collection.update({ :_id => id }, { '$unset' => { FIELD_NAME => true } })
       @attributes.delete("paranoia_deleted_at")
     end
 
@@ -84,7 +86,7 @@ module Mongoid #:nodoc:
       #
       # @return [ Criteria ] The paranoid compliant criteria.
       def criteria(*args)
-        super.where(:paranoia_deleted_at.exists => false)
+        super.where("#{FIELD_NAME}.exists".to_sym => false)
       end
 
       # Find deleted documents
@@ -96,7 +98,7 @@ module Mongoid #:nodoc:
       #
       # @return [ Criteria ] The deleted criteria.
       def deleted
-        where(:paranoia_deleted_at.exists => true)
+        where("#{FIELD_NAME}.exists".to_sym => true)
       end
     end
   end
