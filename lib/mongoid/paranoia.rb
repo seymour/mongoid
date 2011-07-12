@@ -11,7 +11,7 @@ module Mongoid #:nodoc:
   #     include Mongoid::Paranoia
   #   end
   module Paranoia
-    FIELD_NAME = :paranoia_at
+    FIELD_NAME = :deleted_at
     
     extend ActiveSupport::Concern
 
