@@ -47,12 +47,17 @@ module Mongoid #:nodoc:
     #
     # @return [ true ] True.
     def remove(options = {})
-      now = Time.now
-      collection.update({ :_id => id }, { '$set' => { FIELD_NAME => now } })
-      @attributes["paranoia_deleted_at"] = now
-      true
+      if options == {}
+        now = Time.now
+        collection.update({ :_id => id }, { '$set' => { FIELD_NAME => now } })
+        @attributes["paranoia_deleted_at"] = now
+        true
+      else
+        super
+      end
     end
     alias :delete :remove
+    alias :destroy :remove
 
     # Determines if this document is destroyed.
     #
