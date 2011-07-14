@@ -91,7 +91,7 @@ module Mongoid #:nodoc:
       #
       # @return [ Criteria ] The paranoid compliant criteria.
       def criteria(*args)
-        super.where("#{FIELD_NAME}.exists".to_sym => false)
+        super.where(FIELD_NAME => {'$exists' => false})
       end
 
       # Find deleted documents
@@ -103,7 +103,7 @@ module Mongoid #:nodoc:
       #
       # @return [ Criteria ] The deleted criteria.
       def deleted
-        where("#{FIELD_NAME}.exists".to_sym => true)
+        where(FIELD_NAME => {'$exists' => true})
       end
     end
   end
