@@ -50,7 +50,7 @@ module Mongoid #:nodoc:
       if options == {}
         now = Time.now
         collection.update({ :_id => id }, { '$set' => { FIELD_NAME => now } })
-        @attributes["paranoia_deleted_at"] = now
+        @attributes[FIELD_NAME.to_s] = now
         true
       else
         super
@@ -66,7 +66,7 @@ module Mongoid #:nodoc:
     #
     # @return [ true, false ] If the document is destroyed.
     def destroyed?
-      @destroyed || !!paranoia_deleted_at
+      @destroyed || !!deleted_at
     end
 
     # Restores a previously soft-deleted document. Handles this by removing the
@@ -76,7 +76,7 @@ module Mongoid #:nodoc:
     #   document.restore
     def restore
       collection.update({ :_id => id }, { '$unset' => { FIELD_NAME => true } })
-      @attributes.delete("paranoia_deleted_at")
+      @attributes.delete(FIELD_NAME.to_s)
     end
 
     module ClassMethods #:nodoc:
