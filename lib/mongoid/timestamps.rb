@@ -19,7 +19,7 @@ module Mongoid
       # Update the updated_at field on the Document to the current time.
       # This is only called on create and on save.
       def set_updated_at
-        self.updated_at = Time.now.utc
+        self.updated_at = Time.now.utc if changed?
       end
     end
 
