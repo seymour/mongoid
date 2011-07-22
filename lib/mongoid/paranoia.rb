@@ -25,7 +25,9 @@ module Mongoid #:nodoc:
     # @example Hard destroy the document.
     #   document.destroy!
     def destroy!
-      run_callbacks(:destroy) { delete! }
+      run_callbacks(:before_destroy)
+      delete!
+      run_callbacks(:after_destroy)
     end
 
     # Delete the paranoid +Document+ from the database completely.
@@ -48,9 +50,11 @@ module Mongoid #:nodoc:
     # @return [ true ] True.
     def remove(options = {})
       if options == {}
+        run_callbacks(:before_destroy)
         now = Time.now
         collection.update({ :_id => id }, { '$set' => { FIELD_NAME => now } })
         @attributes[FIELD_NAME.to_s] = now
+        run_callbacks(:after_destroy)
         true
       else
         super
