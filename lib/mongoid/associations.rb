@@ -67,11 +67,12 @@ module Mongoid # :nodoc:
       #   end
       #
       def belongs_to_related(name, options = {}, &block)
+        add_index = options.has_key?(:index) ? !!options.delete(:index) : true
         opts = optionize(name, options, fk(name, options), &block)
         associate(Associations::BelongsToRelated, opts)
         key_type = options.key?(:key_type) ? options[:key_type] : String
         field(opts.foreign_key, :type => Mongoid.use_object_ids ? BSON::ObjectId : key_type)
-        index(opts.foreign_key) unless embedded?
+        index(opts.foreign_key) if !embedded? && add_index
       end
 
       # Gets whether or not the document is embedded.
