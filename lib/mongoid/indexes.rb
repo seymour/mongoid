@@ -14,7 +14,7 @@ module Mongoid #:nodoc
       # Add the default indexes to the root document if they do not already
       # exist. Currently this is only _type.
       def add_indexes
-        if hereditary && !indexed
+        if hereditary && !indexed && Mongoid.autocreate_indexes
           self._collection.create_index(:_type, :unique => false, :background => true)
           self.indexed = true
         end
