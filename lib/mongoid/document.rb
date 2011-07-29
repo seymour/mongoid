@@ -160,6 +160,7 @@ module Mongoid #:nodoc:
         @new_record = true
         document = yield self if block_given?
         identify
+        run_callbacks(:after_initialize)
       end
 
       # Returns the class name plus its attributes.

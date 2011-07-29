@@ -16,7 +16,8 @@ module Mongoid #:nodoc:
           :before_update,
           :after_update,
           :before_validation,
-          :after_validation
+          :after_validation,
+          :after_initialize
       end
     end
   end
