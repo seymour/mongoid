@@ -19,6 +19,10 @@ module Mongoid #:nodoc
     Collections::Operations::PROXIED.each do |name|
       define_method(name) { |*args| master.send(name, *args) }
     end
+    
+    def driver
+      master.collection
+    end
 
     # Determines where to send the next read query. If the slaves are not
     # defined then send to master. If the read counter is under the configured

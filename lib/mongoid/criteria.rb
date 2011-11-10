@@ -199,6 +199,14 @@ module Mongoid #:nodoc:
       end
       return new(klass).where(conditions).extras(params)
     end
+    
+    def collection
+      klass.collection
+    end
+    
+    def driver
+      collection.driver
+    end
 
     protected
 

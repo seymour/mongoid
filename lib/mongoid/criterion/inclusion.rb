@@ -105,6 +105,22 @@ module Mongoid #:nodoc:
         end
         self
       end
+      
+      def inclusions
+        @inclusions ||= []
+      end
+      
+      def includes(*relations)                
+        relations.each do |name|
+          inclusions.push(klass.reflect_on_association(name, true))
+        end
+        clone
+      end
+      
+      def load_ids(key)
+        driver.find(selector, { :fields => { key => 1 }}).map { |doc| doc[key] }
+      end
+      
     end
   end
 end

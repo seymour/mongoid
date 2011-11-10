@@ -90,6 +90,11 @@ module Mongoid #:nodoc:
       #
       # An enumerable +Cursor+.
       def execute(paginating = false)
+        criteria.inclusions.reject! do |metadata|
+          metadata.eager_load(criteria)
+          true
+        end
+        
         cursor = klass.collection.find(selector, process_options)
         if cursor
           @count = cursor.count if paginating

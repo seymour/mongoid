@@ -13,7 +13,9 @@ module Mongoid #:nodoc:
       # options: The association +Options+.
       def initialize(document, foreign_key, options, target = nil)
         @options = options
-        @target = target || options.klass.find(foreign_key)
+        @target = target || 
+          IdentityMap.instance.get(options.klass, foreign_key) || 
+          options.klass.find(foreign_key)
         extends(options)
       end
 
@@ -51,6 +53,14 @@ module Mongoid #:nodoc:
         def update(target, document, options)
           document.send("#{options.foreign_key}=", target ? target.id : nil)
           instantiate(document, options, target)
+        end
+        
+        def eager_load(metadata, criteria)
+          klass, foreign_key = metadata.klass, metadata.foreign_key
+          criteria_copy = Marshal.load(Marshal.dump(criteria))
+          klass.any_in('_id' => criteria_copy.load_ids(foreign_key).uniq).each do |doc|
+            IdentityMap.instance.set(doc)
+          end
         end
       end
     end

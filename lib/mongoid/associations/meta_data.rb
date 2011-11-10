@@ -24,6 +24,10 @@ module Mongoid #:nodoc:
       def initialize(association, options)
         @association, @options = association, options
       end
+      
+      def eager_load(criteria)                
+        association.eager_load(self, criteria.clone)
+      end
     end
   end
 end

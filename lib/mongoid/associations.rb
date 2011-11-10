@@ -235,9 +235,9 @@ module Mongoid # :nodoc:
       # Example:
       #
       # <tt>Person.reflect_on_association(:addresses)</tt>
-      def reflect_on_association(name)
+      def reflect_on_association(name, full_reflection = false)
         association = associations[name.to_s]
-        association ? association.macro : nil
+        association ? (full_reflection ? association : association.macro) : nil
       end
 
       protected
