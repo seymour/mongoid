@@ -117,6 +117,17 @@ module Mongoid #:nodoc:
         clone
       end
       
+      def subclasses_includes(*subclasses_relations)
+        subclasses_relations.each do |relation|
+          if relation.is_a?(Hash)
+            klass, relation_name = relation.first
+            klass_instance = Object.module_eval("::#{klass}", __FILE__, __LINE__)
+            inclusions.push(klass_instance.reflect_on_association(relation_name, true))
+          end
+        end
+        clone
+      end
+      
       def load_ids(key)
         driver.find(selector, { :fields => { key => 1 }}).map { |doc| doc[key] }
       end
