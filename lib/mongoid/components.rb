@@ -13,6 +13,7 @@ module Mongoid #:nodoc
       include Mongoid::Extras
       include Mongoid::Fields
       include Mongoid::Indexes
+      include Mongoid::Keys
       include Mongoid::Matchers
       include Mongoid::Memoization
       include Mongoid::Observable
