@@ -72,9 +72,14 @@ module Mongoid #:nodoc:
         # <tt>HasOneToRelated.update(game, person, options)</tt>
         def update(target, document, options)
           if target
-            name = document.class.to_s.underscore
-            target.send("#{name}=", document)
-            return instantiate(document, options, target)
+            if options.respond_to?(:inverse_of) && options.inverse_of
+              target.send("#{options.inverse_of}=", document)
+              return instantiate(document, options, target)
+            else
+              name = document.class.to_s.underscore
+              target.send("#{name}=", document)
+              return instantiate(document, options, target)
+            end
           end
           target
         end
