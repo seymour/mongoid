@@ -18,15 +18,17 @@ Gem::Specification.new do |s|
   s.rubyforge_project         = "mongoid"
 
   s.add_dependency("activemodel", ["~> 3.1"])
-  s.add_dependency("mongo", ["~> 1.3"])
+  s.add_dependency("mongo", ["~> 1.10.0"])
   s.add_dependency("origin", ["~> 1.0.0.beta"])
   s.add_dependency("tzinfo", ["~> 0.3.22"])
 
   s.add_development_dependency("rdoc", ["~> 3.5.0"])
-  s.add_development_dependency("bson_ext", ["~> 1.3"])
+  # s.add_development_dependency("bson_ext", ["~> 1.3"])
+  s.add_development_dependency("bson_ext", ["~> 1.10.0"])
   s.add_development_dependency("mocha", ["~> 0.10"])
   s.add_development_dependency("rspec", ["~> 2.9"])
-  s.add_development_dependency("guard-rspec", ["~> 0.6"])
+  # s.add_development_dependency("guard-rspec", ["~> 0.6"])
+  s.add_development_dependency("guard-rspec", ["~> 1.2.1"])  
   s.add_development_dependency("ammeter", ["~> 0.2"])
 
   s.files        = Dir.glob("lib/**/*") + %w(CHANGELOG.md LICENSE README.md Rakefile)
